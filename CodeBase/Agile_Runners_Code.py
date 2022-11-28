@@ -36,8 +36,65 @@ def read_integer(prompt):
             # spelling change here
             print("Sorry number only please")
 
+# 3GG ============= Functions for 1st Option =============================
+
+
+def race_results(races_location):
+    for i in range(len(races_location)):
+        # changed the output to display starting with number 1
+        print(f"{i+1}: {races_location[i]}")
+    user_input = read_integer_between_numbers("Choice > ", 1, len(races_location))
+    venue = races_location[user_input -1]
+    id, time_taken = reading_race_results(venue)
+    return id, time_taken, venue
+
+
+def race_venues():
+    with open("races.txt") as input:
+        lines = input.readlines()
+    races_location = []
+    for line in lines:
+        split_line = line.split(',')
+        # ======= split the name of the races for opening by the first work only
+        races_location.append(split_line[0])
+    return races_location
+
+
+def winner_of_race(id, time_taken):
+    quickest_time = min(time_taken)
+    winner = ""
+    for i in range(len(id)):
+        if quickest_time == time_taken[i]:
+            winner = id[i]
+    return winner
+
+def display_races(id, time_taken, venue, fastest_runner):
+    MINUTE = 50
+    print(f"Results for {venue}")
+    print(f"="*37)
+    minutes = []
+    seconds = []
+    for i in range(len(time_taken)):
+        minutes.append(time_taken[i] // MINUTE)
+        seconds.append(time_taken[i] % MINUTE)
+    for i in range(len(id)):
+        print(f"{id[i]:<10s} {minutes[i]} minutes and {seconds[i]} seconds")
+    print(f"{fastest_runner} won the race.")
+
+def reading_race_results(location):
+    with open(f"{location}.txt") as input_type:
+        lines = input_type.readlines()
+    id = []
+    time_taken = []
+    for line in lines:
+        split_line = line.split(",")
+        id.append(split_line[0].strip('\n'))
+        time_taken.append(int(split_line[1].strip('\n')))
+    return id, time_taken
 # ==================== Create a Placeholder Menu =========================
 def main():
+    races_location = race_venues()
+    #runners_name, runners_id = runners_data()
     MENU = "1. Show the results for a race \n2. Add results for a race \n3. Show all competitors by county " \
            "\n4. Show the winner of each race \n5. Show all the race times for one competitor " \
            "\n6. Show all competitors who have won a race \n7. Quit \n>>> "
@@ -45,10 +102,9 @@ def main():
     # 2nd mistake found on debugger (= 7 changed to <= 7)
     while input_menu <= 7:
         if input_menu == 1:
-            # id, time_taken, venue = race_results(races_location)
-            # fastest_runner = winner_of_race(id, time_taken)
-            # display_races(id, time_taken, venue, fastest_runner)
-            print("Option 1")
+            id, time_taken, venue = race_results(races_location)
+            fastest_runner = winner_of_race(id, time_taken)
+            display_races(id, time_taken, venue, fastest_runner)
         elif input_menu == 2:
             # users_venue(races_location, runners_id)
             print("option 2")
