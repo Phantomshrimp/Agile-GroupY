@@ -37,8 +37,6 @@ def read_integer(prompt):
             print("Sorry number only please")
 
 # 3GG ============= Functions for 1st Option =============================
-
-
 def race_results(races_location):
     for i in range(len(races_location)):
         # changed the output to display starting with number 1
@@ -48,17 +46,15 @@ def race_results(races_location):
     id, time_taken = reading_race_results(venue)
     return id, time_taken, venue
 
-
 def race_venues():
     with open("races.txt") as input:
         lines = input.readlines()
     races_location = []
     for line in lines:
         split_line = line.split(',')
-        # ======= split the name of the races for opening by the first work only
+        # ======= split the name of the races for opening by the first word only
         races_location.append(split_line[0])
     return races_location
-
 
 def winner_of_race(id, time_taken):
     quickest_time = min(time_taken)
@@ -91,6 +87,9 @@ def reading_race_results(location):
         id.append(split_line[0].strip('\n'))
         time_taken.append(int(split_line[1].strip('\n')))
     return id, time_taken
+# ======================== OPTION 1 WORKING =============================
+
+
 # ==================== Create a Placeholder Menu =========================
 def main():
     races_location = race_venues()
