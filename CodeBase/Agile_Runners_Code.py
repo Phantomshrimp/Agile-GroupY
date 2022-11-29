@@ -89,6 +89,25 @@ def reading_race_results(location):
     return id, time_taken
 # ======================== OPTION 1 WORKING =============================
 
+# ======================== Option 2 Functions ===========================
+# another look at the race input is needed
+def users_venue(races_location, runners_id):
+    while True:
+        user_location = read_nonempty_string("Where will the new race take place? ").capitalize()
+        if user_location not in races_location:
+            break
+    connection = open(f"{user_location}.txt", "a")
+    races_location.append(user_location)
+    time_taken = []
+    updated_runners = []
+    for i in range(len(runners_id)):
+        time_taken_for_runner = read_integer(f"Time for {runners_id[i]}>> ")
+        # !!! FIRST BUG found on debug == changed = 0 to != 0
+        if time_taken_for_runner != 0:
+            time_taken.append(time_taken_for_runner)
+            updated_runners.append(runners_id[i])
+            print(f"{runners_id[i]},{time_taken_for_runner}", file=connection)
+    connection.close()
 
 # ==================== Create a Placeholder Menu =========================
 def main():
@@ -105,7 +124,7 @@ def main():
             fastest_runner = winner_of_race(id, time_taken)
             display_races(id, time_taken, venue, fastest_runner)
         elif input_menu == 2:
-            # users_venue(races_location, runners_id)
+            users_venue(races_location, runners_id)
             print("option 2")
         elif input_menu == 3:
             # competitors_by_county(runners_name, runners_id)
