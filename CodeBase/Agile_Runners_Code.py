@@ -162,6 +162,16 @@ def competitors_by_county(name, id):
     for i in range(len(name)):
         if id[i].startswith("WD"):
             print(f"{name[i]} ({id[i]})")
+
+# ========================== OPTION 4 =========================
+def displaying_winners_of_each_race(races_location):
+    # Changed Looser to Winner - the times were double checked
+    print("Venue             Winner")
+    print("="*24)
+    for i in range(len(races_location)):
+        id, time_taken = reading_race_results(races_location[i])
+        fastest_runner = winner_of_race(id, time_taken)
+        print(f"{races_location[i]:<18s}{fastest_runner}")
 # ==================== Create a Placeholder Menu =========================
 def main():
     races_location = race_venues()
@@ -183,7 +193,7 @@ def main():
             competitors_by_county(runners_name, runners_id)
             print("Option 3")
         elif input_menu == 4:
-            # displaying_winners_of_each_race(races_location)
+            displaying_winners_of_each_race(races_location)
             print("Option 4")
         elif input_menu == 5:
             # runner, id = relevant_runner_info(runners_name, runners_id)
