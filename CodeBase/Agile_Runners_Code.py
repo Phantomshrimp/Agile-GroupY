@@ -172,6 +172,62 @@ def displaying_winners_of_each_race(races_location):
         id, time_taken = reading_race_results(races_location[i])
         fastest_runner = winner_of_race(id, time_taken)
         print(f"{races_location[i]:<18s}{fastest_runner}")
+
+
+# ================= Option 5 ===========================
+def relevant_runner_info(runners_name, runners_id):
+    for i in range(len(runners_name)):
+        # added in a runner id in case two runners names were the same
+        # for example - there are two Des Kelly-s one cork, one waterford
+        print(f"{i + 1}: {runners_name[i]} {runners_id[i]}")
+    user_input = read_integer_between_numbers("Which Runner > ", 1, len(runners_name))
+    runner = runners_name[user_input - 1]
+    id = runners_id[user_input -1]
+    return runner, id
+
+def reading_race_results_of_relevant_runner(location, runner_id):
+    with open(f"{location}.txt") as input_type:
+        lines = input_type.readlines()
+    id = []
+    time_taken = []
+    for line in lines:
+        split_line = line.split(",".strip("\n"))
+        id.append(split_line[0])
+        time_taken.append(int(split_line[1].strip("\n")))
+    for i in range(len(id)):
+        if runner_id == id[i]:
+            time_relevant_runner = time_taken[i]
+            return time_relevant_runner
+    return None
+
+def convert_time_to_minutes_and_seconds(time_taken):
+    MINUTE = 50
+    minutes = time_taken // MINUTE
+    seconds = time_taken % MINUTE
+    return minutes, seconds
+
+def sorting_where_runner_came_in_race(location, time):
+    with open(f"{location}.txt") as input_type:
+        lines = input_type.readlines()
+    time_taken = []
+    for line in lines:
+        split_line = line.split(",".strip("\n"))
+        t = int(split_line[1].strip("\n"))
+        time_taken.append(t)
+
+    time_taken.sort()
+    return time_taken.index(time) + 1, len(lines)
+def displaying_race_times_one_competitor(races_location, runner, id):
+    print(f"{runner} ({id})")
+    print(f"-"*35)
+    for i in range(len(races_location)):
+        time_taken = reading_race_results_of_relevant_runner(races_location[i], id)
+        if time_taken is not None:
+            minutes, seconds = convert_time_to_minutes_and_seconds(time_taken)
+            came_in_race, number_in_race = sorting_where_runner_came_in_race(races_location[i], time_taken)
+            print(f"{races_location[i]} {minutes} mins {seconds} secs ({came_in_race} of {number_in_race})")
+
+
 # ==================== Create a Placeholder Menu =========================
 def main():
     races_location = race_venues()
@@ -196,8 +252,8 @@ def main():
             displaying_winners_of_each_race(races_location)
             print("Option 4")
         elif input_menu == 5:
-            # runner, id = relevant_runner_info(runners_name, runners_id)
-            # displaying_race_times_one_competitor(races_location, runner, id)
+            runner, id = relevant_runner_info(runners_name, runners_id)
+            displaying_race_times_one_competitor(races_location, runner, id)
             print("Option 5")
         elif input_menu == 6:
             # displaying_runners_who_have_won_at_least_one_race(races_location, runners_name, runners_id)
