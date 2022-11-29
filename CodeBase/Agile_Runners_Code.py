@@ -89,11 +89,83 @@ def reading_race_results(location):
     return id, time_taken
 # ======================== OPTION 1 WORKING =============================
 
+# ======================== Option 2 Functions ===========================
+# another look at the race input is needed
+# this may need to be looke at
+def users_venue(races_location, runners_id):
+    while True:
+        user_location = read_nonempty_string("Where will the new race take place? ").capitalize()
+        if user_location not in races_location:
+            break
+    connection = open(f"{user_location}.txt", "a")
+    races_location.append(user_location)
+    time_taken = []
+    updated_runners = []
+    for i in range(len(runners_id)):
+        time_taken_for_runner = read_integer(f"Time for {runners_id[i]}>> ")
+        # !!! FIRST BUG found on debug == changed = 0 to != 0
+        if time_taken_for_runner != 0:
+            time_taken.append(time_taken_for_runner)
+            updated_runners.append(runners_id[i])
+            print(f"{runners_id[i]},{time_taken_for_runner}", file=connection)
+    connection.close()
 
+# ==================== Option 3 ====================================
+# code was missing the call for other county codes number 5 I think
+
+# THIRD CHANGE === fixed list out of index range
+# the issue was the \n was still being attached to the id
+def runners_data():
+    with open("runners.txt") as input:
+        lines = input.readlines()
+    runners_name = []
+    runners_id = []
+    for line in lines:
+        split_line = line.split(',')
+        runners_name.append(split_line[0])
+        runners_id.append(split_line[1].strip('\n'))
+    return runners_name, runners_id
+
+def competitors_by_county(name, id):
+    print()
+    print("=" * 20)
+    print("Cork runners")
+    print("-" * 20)
+    for i in range(len(name)):
+        if id[i].startswith("CK"):
+            print(f"{name[i]} ({id[i]})")
+    print()
+    print("=" * 20)
+    print("Kerry runners")
+    print("-" * 20)
+    for i in range(len(name)):
+        if id[i].startswith("KY"):
+            print(f"{name[i]} ({id[i]})")
+    print()
+    print("=" * 20)
+    print("Limerick runners")
+    print("-" * 20)
+    for i in range(len(name)):
+        if id[i].startswith("LK"):
+            print(f"{name[i]} ({id[i]})")
+    print()
+    print("=" * 20)
+    print("Tipperary runners")
+    print("-" * 20)
+    for i in range(len(name)):
+        if id[i].startswith("TP"):
+            print(f"{name[i]} ({id[i]})")
+    print()
+    print("=" * 20)
+    print("Waterford runners")
+    print("-" * 20)
+    for i in range(len(name)):
+        if id[i].startswith("WD"):
+            print(f"{name[i]} ({id[i]})")
 # ==================== Create a Placeholder Menu =========================
 def main():
     races_location = race_venues()
-    #runners_name, runners_id = runners_data()
+    runners_name, runners_id = runners_data()
     MENU = "1. Show the results for a race \n2. Add results for a race \n3. Show all competitors by county " \
            "\n4. Show the winner of each race \n5. Show all the race times for one competitor " \
            "\n6. Show all competitors who have won a race \n7. Quit \n>>> "
@@ -105,10 +177,10 @@ def main():
             fastest_runner = winner_of_race(id, time_taken)
             display_races(id, time_taken, venue, fastest_runner)
         elif input_menu == 2:
-            # users_venue(races_location, runners_id)
+            users_venue(races_location, runners_id)
             print("option 2")
         elif input_menu == 3:
-            # competitors_by_county(runners_name, runners_id)
+            competitors_by_county(runners_name, runners_id)
             print("Option 3")
         elif input_menu == 4:
             # displaying_winners_of_each_race(races_location)
