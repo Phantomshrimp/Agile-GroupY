@@ -227,6 +227,31 @@ def displaying_race_times_one_competitor(races_location, runner, id):
             came_in_race, number_in_race = sorting_where_runner_came_in_race(races_location[i], time_taken)
             print(f"{races_location[i]} {minutes} mins {seconds} secs ({came_in_race} of {number_in_race})")
 
+# ============================== OPTION 6 ====================================
+def finding_name_of_winner(fastest_runner, id, runners_name):
+    runner = ""
+    for i in range(len(id)):
+        if fastest_runner == id[i]:
+            runner = runners_name[i]
+    return runner
+
+
+
+# bug here was in glengarriff where KY-12 was entered as 0 incorrectly
+def displaying_runners_who_have_won_at_least_one_race(races_location, runners_name, runners_id):
+    print(f"The following runners have all won at least one race:")
+    print(f"-" * 55)
+    winners = []
+    runners = []
+    for i, location in enumerate(races_location):
+        id, time_taken = reading_race_results(location)
+        fastest_runner = winner_of_race(id, time_taken)
+        name_of_runner = finding_name_of_winner(fastest_runner, runners_id, runners_name)
+        if fastest_runner not in winners:
+            winners.append(fastest_runner)
+            runners.append(name_of_runner)
+    for i, fastest_runner in enumerate(winners):
+        print(f"{runners[i]} ({fastest_runner})")
 
 # ==================== Create a Placeholder Menu =========================
 def main():
@@ -256,7 +281,7 @@ def main():
             displaying_race_times_one_competitor(races_location, runner, id)
             print("Option 5")
         elif input_menu == 6:
-            # displaying_runners_who_have_won_at_least_one_race(races_location, runners_name, runners_id)
+            displaying_runners_who_have_won_at_least_one_race(races_location, runners_name, runners_id)
         # added a quitting message
             print("Option 6")
         else:
