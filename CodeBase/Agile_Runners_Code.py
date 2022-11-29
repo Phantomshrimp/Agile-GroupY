@@ -91,6 +91,7 @@ def reading_race_results(location):
 
 # ======================== Option 2 Functions ===========================
 # another look at the race input is needed
+# this may need to be looke at
 def users_venue(races_location, runners_id):
     while True:
         user_location = read_nonempty_string("Where will the new race take place? ").capitalize()
