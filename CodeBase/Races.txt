@@ -1,5 +1,7 @@
-Currabinny, 30
-Adrigole, 32
-Conna, 29
+Currabinny, 30.0
+Adrigole, 32.0
+Conna, 29.0
 Dunmanway, 29.5
 Glengarriff, 32.5
+Hotel, 50.0
+Mars, 10.0

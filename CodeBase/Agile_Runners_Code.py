@@ -50,11 +50,13 @@ def race_venues():
     with open("races.txt") as input:
         lines = input.readlines()
     races_location = []
+    races_eta = []
     for line in lines:
         split_line = line.split(',')
         # ======= split the name of the races for opening by the first word only
         races_location.append(split_line[0])
-    return races_location
+        races_eta.append(float(split_line[1]))
+    return races_location, races_eta
 
 def winner_of_race(id, time_taken):
     quickest_time = min(time_taken)
@@ -92,13 +94,15 @@ def reading_race_results(location):
 # ======================== Option 2 Functions ===========================
 # another look at the race input is needed
 # this may need to be looke at
-def users_venue(races_location, runners_id):
+def users_venue(races_location, races_eta, runners_id):
     while True:
-        user_location = read_nonempty_string("Where will the new race take place? ").capitalize()
+        user_location = read_nonempty_string("Where will the new race take place?: ").capitalize()
+        user_eta = float(input("How long should the race take on average?: "))
         if user_location not in races_location:
             break
     connection = open(f"{user_location}.txt", "a")
     races_location.append(user_location)
+    races_eta.append(user_eta)
     time_taken = []
     updated_runners = []
     for i in range(len(runners_id)):
@@ -109,6 +113,14 @@ def users_venue(races_location, runners_id):
             updated_runners.append(runners_id[i])
             print(f"{runners_id[i]},{time_taken_for_runner}", file=connection)
     connection.close()
+
+# now including the eta of a race when editing the races.txt file
+def updating_races_file(races_location, races_eta):
+    connection = open(f"races.txt", "w")
+    for i in range(len(races_location)):
+        print(f"{races_location[i]}, {races_eta[i]}", file=connection)
+    connection.close()
+
 
 # ==================== Option 3 ====================================
 # code was missing the call for other county codes number 5 I think
@@ -217,6 +229,7 @@ def sorting_where_runner_came_in_race(location, time):
 
     time_taken.sort()
     return time_taken.index(time) + 1, len(lines)
+
 def displaying_race_times_one_competitor(races_location, runner, id):
     print(f"{runner} ({id})")
     print(f"-"*35)
@@ -255,7 +268,7 @@ def displaying_runners_who_have_won_at_least_one_race(races_location, runners_na
 
 # ==================== Create a Placeholder Menu =========================
 def main():
-    races_location = race_venues()
+    races_location, races_eta = race_venues()
     runners_name, runners_id = runners_data()
     MENU = "1. Show the results for a race \n2. Add results for a race \n3. Show all competitors by county " \
            "\n4. Show the winner of each race \n5. Show all the race times for one competitor " \
@@ -269,7 +282,7 @@ def main():
             fastest_runner = winner_of_race(id, time_taken)
             display_races(id, time_taken, venue, fastest_runner)
         elif input_menu == 2:
-            users_venue(races_location, runners_id)
+            users_venue(races_location, races_eta, runners_id)
         elif input_menu == 3:
             competitors_by_county(runners_name, runners_id)
         elif input_menu == 4:
@@ -292,7 +305,7 @@ def main():
             break
         print()
         input_menu = read_integer_between_numbers(MENU, 1, 8)
-    # updating_races_file(races_location)
+    updating_races_file(races_location, races_eta)
 
 
 main()
