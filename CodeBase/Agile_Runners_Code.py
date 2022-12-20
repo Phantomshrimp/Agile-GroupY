@@ -298,6 +298,7 @@ def main():
             print("=" * 20)
             print("Option to see which runners did not reach the podium")
             print("Rumour has it, there may even be a dark mode of the app coming... shhhhh")
+            print("Yaml check")
         # added a quitting message
         # took out placeholder messages
         else:
